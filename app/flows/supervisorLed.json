@@ -1,0 +1,198 @@
+[{
+  "id": "8b242bcf.60fb78",
+  "type": "inject",
+  "z": "27dd0106.91ed5e",
+  "name": "Poll interval",
+  "topic": "",
+  "payload": "",
+  "payloadType": "date",
+  "repeat": "2",
+  "crontab": "",
+  "once": true,
+  "x": 150,
+  "y": 247,
+  "wires": [
+    ["93eaf144.88333"]
+  ]
+}, {
+  "id": "bfbc0c7f.b2758",
+  "type": "serial out",
+  "z": "27dd0106.91ed5e",
+  "name": "Kitracom",
+  "serial": "846a8851.2dfd18",
+  "x": 1267,
+  "y": 231,
+  "wires": []
+}, {
+  "id": "93eaf144.88333",
+  "type": "device",
+  "z": "27dd0106.91ed5e",
+  "name": "device state",
+  "x": 370,
+  "y": 247,
+  "wires": [
+    ["a5460a07.24f658"]
+  ]
+}, {
+  "id": "89c5856a.0afe58",
+  "type": "inject",
+  "z": "27dd0106.91ed5e",
+  "name": "startup",
+  "topic": "",
+  "payload": "",
+  "payloadType": "date",
+  "repeat": "",
+  "crontab": "",
+  "once": true,
+  "x": 130,
+  "y": 100,
+  "wires": [
+    ["febab7ea.f3d4a8"]
+  ]
+}, {
+  "id": "febab7ea.f3d4a8",
+  "type": "led_rgb_enable",
+  "z": "27dd0106.91ed5e",
+  "name": "Enable LED",
+  "pin": "1",
+  "enabled": "true",
+  "x": 370,
+  "y": 100,
+  "wires": [
+    ["dac5e12d.e0363"]
+  ]
+}, {
+  "id": "dac5e12d.e0363",
+  "type": "serial out",
+  "z": "27dd0106.91ed5e",
+  "name": "Kitracom",
+  "serial": "846a8851.2dfd18",
+  "x": 600,
+  "y": 100,
+  "wires": []
+}, {
+  "id": "f883bfc5.e7d6f",
+  "type": "comment",
+  "z": "27dd0106.91ed5e",
+  "name": "Enable LED 1",
+  "info": "",
+  "x": 150,
+  "y": 60,
+  "wires": []
+}, {
+  "id": "a5460a07.24f658",
+  "type": "switch",
+  "z": "27dd0106.91ed5e",
+  "name": "Idle or Downloading",
+  "property": "payload.status",
+  "propertyType": "msg",
+  "rules": [{
+    "t": "eq",
+    "v": "Idle",
+    "vt": "str"
+  }, {
+    "t": "eq",
+    "v": "Downloading",
+    "vt": "str"
+  }],
+  "checkall": "true",
+  "outputs": 2,
+  "x": 600,
+  "y": 247,
+  "wires": [
+    ["48281f3d.976e3"],
+    ["781df36d.d72b8c", "74badf84.2c95f"]
+  ]
+}, {
+  "id": "48281f3d.976e3",
+  "type": "led_rgb_set",
+  "z": "27dd0106.91ed5e",
+  "name": "Idle, set LED 1 green",
+  "pin": "1",
+  "color": "00ff00",
+  "intensity": "10",
+  "autostart": "true",
+  "x": 840,
+  "y": 220,
+  "wires": [
+    ["bfbc0c7f.b2758"]
+  ]
+}, {
+  "id": "f24cd29d.353be",
+  "type": "comment",
+  "z": "27dd0106.91ed5e",
+  "name": "Use LED 1 to show device state (Idle or Downloading)",
+  "info": "",
+  "x": 280,
+  "y": 207,
+  "wires": []
+}, {
+  "id": "e617bbc8.c2e568",
+  "type": "debug",
+  "z": "27dd0106.91ed5e",
+  "name": "",
+  "active": true,
+  "console": "false",
+  "complete": "payload",
+  "x": 1064,
+  "y": 440,
+  "wires": []
+}, {
+  "id": "781df36d.d72b8c",
+  "type": "function",
+  "z": "27dd0106.91ed5e",
+  "name": "Prepare Download progress msg",
+  "func": "var newMsg = {\n    payload: \"Download progress: \" + msg.payload.download_progress + \"%\"\n};\nreturn newMsg;",
+  "outputs": 1,
+  "noerr": 0,
+  "x": 794,
+  "y": 440,
+  "wires": [
+    ["e617bbc8.c2e568"]
+  ]
+}, {
+  "id": "600716b.102dce8",
+  "type": "led_rgb_set_managed",
+  "z": "27dd0106.91ed5e",
+  "name": "Blink LED 1 blue",
+  "pin": "1",
+  "effect": "1",
+  "color_target": "4568A3",
+  "intensity_target": "50",
+  "duration": "1000",
+  "loop": "0",
+  "loop_delay": "0",
+  "autostart": "true",
+  "x": 1098,
+  "y": 274,
+  "wires": [
+    ["bfbc0c7f.b2758"]
+  ]
+}, {
+  "id": "74badf84.2c95f",
+  "type": "led_rgb_set",
+  "z": "27dd0106.91ed5e",
+  "name": "Downloading, set LED 1 off",
+  "pin": "1",
+  "color": "000000",
+  "intensity": "0",
+  "autostart": "true",
+  "x": 868,
+  "y": 275,
+  "wires": [
+    ["600716b.102dce8"]
+  ]
+}, {
+  "id": "846a8851.2dfd18",
+  "type": "serial-port",
+  "z": "",
+  "serialport": "/dev/ttySAC3",
+  "serialbaud": "115200",
+  "databits": "8",
+  "parity": "none",
+  "stopbits": "1",
+  "newline": "\\n",
+  "bin": "false",
+  "out": "char",
+  "addchar": false
+}]
